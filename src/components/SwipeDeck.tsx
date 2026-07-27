@@ -45,7 +45,7 @@ export function SwipeDeck({ bouquets }: { bouquets: Bouquet[] }) {
         <div className="relative h-[560px] w-full max-w-sm">
           {next && <StackedCard bouquet={next} depth={1} key={"n-" + next.id} />}
 
-          <AnimatePresence>
+          <AnimatePresence custom={lastAction?.dir}>
             {current ? (
               <SwipeCard
                 key={current.id}
@@ -125,12 +125,16 @@ function SwipeCard({
       }}
       initial={{ scale: 0.92, opacity: 0, y: 20 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
-      exit={(dir: "left" | "right" | undefined) => ({
-        x: (dir === "left" ? -1 : 1) * 500,
-        opacity: 0,
-        rotate: (dir === "left" ? -1 : 1) * 25,
-        transition: { duration: 0.35 },
-      })}
+      custom={undefined as "left" | "right" | undefined}
+      variants={{
+        exit: (dir?: "left" | "right") => ({
+          x: (dir === "left" ? -1 : 1) * 500,
+          opacity: 0,
+          rotate: (dir === "left" ? -1 : 1) * 25,
+          transition: { duration: 0.35 },
+        }),
+      }}
+      exit="exit"
       transition={{ type: "spring", stiffness: 200, damping: 24 }}
     >
       <img
