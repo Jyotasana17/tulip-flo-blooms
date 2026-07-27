@@ -1,14 +1,21 @@
 import { Link } from "@tanstack/react-router";
 import { Search, Heart, ShoppingBag, User, Home } from "lucide-react";
+import { useWishlist } from "@/lib/wishlist";
 
 export function Navbar() {
+  const { ids } = useWishlist();
+  const count = ids.length;
+
   return (
     <>
       <header className="sticky top-0 z-40 w-full">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:py-5">
           <Link to="/" className="flex items-center gap-2">
             <span className="text-2xl">🌷</span>
-            <span className="font-display text-2xl italic tracking-tight text-charcoal" style={{ color: "var(--charcoal)" }}>
+            <span
+              className="font-display text-2xl italic tracking-tight"
+              style={{ color: "var(--charcoal)" }}
+            >
               Tulip Flo
             </span>
           </Link>
@@ -22,7 +29,22 @@ export function Navbar() {
             </div>
           </div>
           <nav className="flex items-center gap-1 md:gap-3">
-            <IconBtn label="Wishlist"><Heart size={18} /></IconBtn>
+            <Link
+              to="/wishlist"
+              aria-label="Wishlist"
+              className="relative grid h-10 w-10 place-items-center rounded-full transition hover:-translate-y-0.5 hover:bg-white/70"
+              style={{ color: "var(--charcoal)" }}
+            >
+              <Heart size={18} />
+              {count > 0 && (
+                <span
+                  className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full px-1 text-[10px] font-semibold text-white"
+                  style={{ background: "var(--gradient-rose-gold)" }}
+                >
+                  {count}
+                </span>
+              )}
+            </Link>
             <IconBtn label="Cart"><ShoppingBag size={18} /></IconBtn>
             <IconBtn label="Profile"><User size={18} /></IconBtn>
           </nav>
@@ -31,8 +53,32 @@ export function Navbar() {
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 gap-1 rounded-full px-2 py-2 md:hidden glass-card">
-        <MobileBtn label="Home"><Home size={18} /></MobileBtn>
-        <MobileBtn label="Wishlist"><Heart size={18} /></MobileBtn>
+        <Link
+          to="/"
+          aria-label="Home"
+          className="flex flex-col items-center gap-0.5 rounded-full px-4 py-2 text-[10px] transition active:scale-95"
+          style={{ color: "var(--charcoal)" }}
+        >
+          <Home size={18} />
+          <span>Home</span>
+        </Link>
+        <Link
+          to="/wishlist"
+          aria-label="Wishlist"
+          className="relative flex flex-col items-center gap-0.5 rounded-full px-4 py-2 text-[10px] transition active:scale-95"
+          style={{ color: "var(--charcoal)" }}
+        >
+          <Heart size={18} />
+          <span>Wishlist</span>
+          {count > 0 && (
+            <span
+              className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full px-1 text-[9px] font-semibold text-white"
+              style={{ background: "var(--gradient-rose-gold)" }}
+            >
+              {count}
+            </span>
+          )}
+        </Link>
         <MobileBtn label="Cart"><ShoppingBag size={18} /></MobileBtn>
         <MobileBtn label="Profile"><User size={18} /></MobileBtn>
       </nav>
